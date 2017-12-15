@@ -65,6 +65,8 @@ public class Usuario implements Serializable {
     @Column(name = "FECHA_ACT_US")
     @Temporal(TemporalType.DATE)
     private Date fechaActUs;
+    @Column(name = "CODIGO_PERFIL")
+    private Integer codigoPerfil;
     @JoinColumn(name = "codigo_emp", referencedColumnName = "codigo_emp")
     @ManyToOne(optional = false)
     private Empleado codigoEmp;
@@ -170,6 +172,14 @@ public class Usuario implements Serializable {
 
 	public void setCodigoEmp(Empleado codigoEmp) {
 		this.codigoEmp = codigoEmp;
+	}
+
+	public Integer getCodigoPerfil() {
+		return codigoPerfil;
+	}
+
+	public void setCodigoPerfil(Integer codigoPerfil) {
+		this.codigoPerfil = codigoPerfil;
 	}
     
 }

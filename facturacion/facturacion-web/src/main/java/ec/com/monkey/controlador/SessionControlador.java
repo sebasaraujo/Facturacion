@@ -8,6 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import ec.com.monkey.enumeradores.EstadoEnum;
+import ec.com.monkey.enumeradores.PerfilesEnum;
 import ec.com.monkey.modelo.Empleado;
 import ec.com.monkey.modelo.Local;
 import ec.com.monkey.modelo.Usuario;
@@ -26,6 +27,7 @@ public class SessionControlador extends BaseControlador implements Serializable{
 	private String nombreUsuario;
 	private boolean logueoCorrecto;
 	private String identificacionUsuario;
+	private boolean administrador;
 	
 	@EJB
 	private LocalServiceLocal localService;
@@ -37,28 +39,18 @@ public class SessionControlador extends BaseControlador implements Serializable{
 	@PostConstruct
 	public void init()
 	{
-		if(logueoCorrecto)
-		{
-			System.out.println("logueo: "+logueoCorrecto);
-			Usuario usuario = usuarioServiceLocal.obtenerPorIdentificacion(identificacionUsuario, EstadoEnum.ACTIVO.getValor());
-			local = localService.obtenerLocalXCodigo(1);
-			empleado = usuario.getCodigoEmp();
-			System.out.println("nombre local: "+empleado.getCodigoLo());
-		}
-		else
-		{
-			redireccionarPagina("/faces/paginas/login.xhtml");
-		}
 		
 	}
 	
 	public void asaignar()
 	{
-		System.out.println("logueo: "+logueoCorrecto);
 		Usuario usuario = usuarioServiceLocal.obtenerPorIdentificacion(identificacionUsuario, EstadoEnum.ACTIVO.getValor());
-		local = localService.obtenerLocalXCodigo(1);
 		empleado = usuario.getCodigoEmp();
-		System.out.println("nombre local: "+empleado.getCodigoLo());
+		local = localService.obtenerLocalXCodigo(empleado.getCodigoLo().getCodigoLo());
+		if(usuario.getCodigoPerfil().equals(PerfilesEnum.ADMINISTRADOR.getCodigo()))
+		{
+			administrador = Boolean.TRUE;
+		}
 	}
 	
 	public void cerrarSesion() {
@@ -105,6 +97,14 @@ public class SessionControlador extends BaseControlador implements Serializable{
 
 	public void setIdentificacionUsuario(String identificacionUsuario) {
 		this.identificacionUsuario = identificacionUsuario;
+	}
+
+	public boolean isAdministrador() {
+		return administrador;
+	}
+
+	public void setAdministrador(boolean administrador) {
+		this.administrador = administrador;
 	}
 
 }
