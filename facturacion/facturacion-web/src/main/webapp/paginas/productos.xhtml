@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	template="/plantillas/contenedor_interno.xhtml">
+
+	<ui:define name="titulo">
+        SISTEMA DE FACTURACION
+    </ui:define>
+	<ui:define name="contenido">
+		<h:form id="formPrincipal">
+			<p:messages showDetail="true" autoUpdate="true"
+				closable="true" />			
+			<h:panelGroup id="panelProductos">
+				<div id="datosClientesId" class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Productos</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="inputEmail4">Nombre</label>
+							<p:inputText placeholder="Nombre" styleClass="form-control" value="#{productoControlador.producto.nombrePr}"
+							required="true" requiredMessage="El nombre del producto es obligatorio."/>
+						</div>
+						<div id="identificacionDiv" class="form-group col-md-6">
+							<label for="inputPassword4">Precio</label>
+								<p:inputText placeholder="Precio" required="true" requiredMessage="El precio del producto es obligatorio."
+									validatorMessage="Debe ingresar solo numeros" converterMessage="Debe ingresar solo numeros"
+									styleClass="form-control" value="#{productoControlador.producto.precioPr}">
+								</p:inputText>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="inputAddress">Codigo</label>
+							<p:inputText placeholder="Codigo Referencial" required="true" requiredMessage="El codigo del producto es obligatorio"
+							styleClass="form-control" value="#{productoControlador.producto.codigoRefPr}"/>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputAddress2">Tipo Producto</label>
+							<h:selectOneMenu styleClass="form-control" value="#{productoControlador.codigoTipoProducto}">
+								<f:selectItems value="#{productoControlador.listaTipoProductos}" var="tipoProducto" itemLabel="#{tipoProducto.nombreTp}"
+								itemValue="#{tipoProducto.codigoTp}"/>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputAddress">Descripcion</label> <p:inputText
+							required="true" requiredMessage="La descripcion del producto es obligatoria"
+							styleClass="form-control"  placeholder="Descripcion del producto" value="#{productoControlador.producto.descripcionPr}"/>
+					</div>
+				</div>
+				<div>
+				      <p:commandButton value="Guardar" styleClass="btn btn-info btn-xs" action="#{productoControlador.guardarProducto()}"
+				      update="formPrincipal" process="formPrincipal:panelProductos"/>
+				</div>
+				<br/>
+			</div>
+			</h:panelGroup>
+			
+			<h:panelGroup id="tablaProductos">
+				<div id="datosClientesId" class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Lista de Productos</h3>
+				</div>
+				<div class="panel-body">
+					<p:dataTable id="productosId" var="producto" value="#{productoControlador.listaProductos}" editable="true" style="margin-bottom:20px">
+				       <f:facet name="header">
+				           Lista de Productos
+				       </f:facet>
+				 
+				       <p:ajax event="rowEdit" listener="#{productoControlador.onRowEdit}"/>
+				       <p:ajax event="rowEditCancel" listener="#{productoControlador.onRowCancel}"  />
+				 
+				       <p:column headerText="Nombre">
+				           <p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{producto.nombrePr}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{producto.nombrePr}" style="width:100%"/></f:facet>
+				           </p:cellEditor>
+				       </p:column>
+				 
+				       <p:column headerText="Precio">
+				           <p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{producto.precioPr}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{producto.precioPr}" style="width:100%" label="Precio"/></f:facet>
+				           </p:cellEditor>
+				       </p:column>
+				 
+				       <p:column headerText="Codigo">
+				           <p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{producto.codigoRefPr}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{producto.codigoRefPr}" style="width:100%" label="Codigo"/></f:facet>
+				           </p:cellEditor>
+				       </p:column>
+				 
+				       <p:column headerText="Descripcion">
+				           <p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{producto.descripcionPr}" /></f:facet>
+				               <f:facet name="input"><p:inputText value="#{producto.descripcionPr}" style="width:100%" label="Descripcion"/></f:facet>
+				           </p:cellEditor>
+				       </p:column>
+				       <p:column headerText="Estado">
+				           <p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{producto.estadoPr == 'A' ? 'ACTIVO' : 'INACTIVO'}" /></f:facet>
+				               <f:facet name="input">
+				               <h:selectOneMenu value="#{producto.estadoPr}" style="width:100%" styleClass="form-control">
+			                       <f:selectItem itemLabel="ACTIVO" itemValue="A"/>
+			                       <f:selectItem itemLabel="INACTIVO" itemValue="I"/>
+			                   </h:selectOneMenu></f:facet>
+				           </p:cellEditor>
+				       </p:column>
+				 
+				       <p:column style="width:32px">
+				           <p:rowEditor />
+				       </p:column>
+				   </p:dataTable>
+				</div>
+				</div>
+			</h:panelGroup>
+		
+		</h:form>
+	</ui:define>
+</ui:composition>
