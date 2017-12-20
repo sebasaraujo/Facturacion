@@ -27,6 +27,7 @@ import ec.com.monkey.servicios.local.ImpuestoFacturaServiceLocal;
 import ec.com.monkey.servicios.local.ProductosServiceLocal;
 import ec.com.monkey.servicios.local.TipoFacturaServiceLocal;
 import ec.com.monkey.servicios.local.TipoIdentificacionServiceLocal;
+import ec.com.monkey.util.Util;
 
 @Named(value = "clienteControlador")
 @ViewScoped
@@ -44,6 +45,7 @@ public class ClienteControlador extends BaseControlador implements Serializable{
 	private Double impuestos = 0.0;
 	private Double total = 0.0;
 	private Factura factura;
+	private ec.com.monkey.modelo.comprobantes.Factura facturaXml;
 	
 	@EJB
 	private ClienteServiceLocal clienteService;
@@ -199,7 +201,7 @@ public class ClienteControlador extends BaseControlador implements Serializable{
 			factura.setEstadoFc(EstadoEnum.ACTIVO.getValor());
 			factura.setFechaActFc(new Date());
 			factura.setFechaFc(new Date());
-			factura.setNumeroFc(generarNumeroFactura());
+			factura.setNumeroFc(Util.generarNumeroFactura(facturaService));
 			factura.setSubtotalFc(subtotal);
 			factura.setTotalFc(total);
 			factura.setValorImpFc(impuestos);
@@ -213,6 +215,7 @@ public class ClienteControlador extends BaseControlador implements Serializable{
 				df.setUsuarioActDf(1);
 				detalleFacturaService.crear(df);
 			}
+			facturaXml = Util.generarXML(factura,listaDetalleFactura);
 			agregarMensajeInformacion("Factura realizada correctamente", "");
 		} catch (Exception e) {
 			
@@ -220,14 +223,6 @@ public class ClienteControlador extends BaseControlador implements Serializable{
 		
 	}
 	
-	private String generarNumeroFactura()
-	{
-		Integer numeroActual = facturaService.obtenerNumeroFactura();
-		numeroActual += 1;
-		String formatString = String.format("%%0%dd", 7);
-		String numero = String.format(formatString, numeroActual);
-		return numero;
-	}
 
 	public Cliente getCliente() {
 		return cliente;
@@ -315,6 +310,14 @@ public class ClienteControlador extends BaseControlador implements Serializable{
 
 	public void setFactura(Factura factura) {
 		this.factura = factura;
+	}
+
+	public ec.com.monkey.modelo.comprobantes.Factura getFacturaXml() {
+		return facturaXml;
+	}
+
+	public void setFacturaXml(ec.com.monkey.modelo.comprobantes.Factura facturaXml) {
+		this.facturaXml = facturaXml;
 	}
 	
 	

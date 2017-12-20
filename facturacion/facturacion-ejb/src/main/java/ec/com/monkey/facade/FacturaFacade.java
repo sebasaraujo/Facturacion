@@ -38,7 +38,7 @@ public class FacturaFacade extends AbstractFacade<Factura> implements FacturaFac
     public Integer obtenerNumeroFactura()
     {
     	try {
-    		Query q = em.createNativeQuery("select max(to_number(numero_fc,'9999999')) as numero from factura");
+    		Query q = em.createNativeQuery("select max(to_number(numero_fc,'999999999')) as numero from factura");
         	return ((BigDecimal) q.getSingleResult()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
