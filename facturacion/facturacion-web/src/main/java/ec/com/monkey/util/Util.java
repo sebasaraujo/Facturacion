@@ -107,7 +107,9 @@ public class Util {
 	public static void llenarComprobante(ec.com.monkey.modelo.Factura documento, Factura factura)
 	{
 		SimpleDateFormat dt1 = new SimpleDateFormat("ddMMyyyy");
+		SimpleDateFormat dt2 = new SimpleDateFormat("dd/MM/yyyy");
 		String fecha = dt1.format(new Date());
+		String fechaActual = dt2.format(new Date());
 		String codigoNumerico = generarNumerico();
 		InfoTributaria infoTributaria = new InfoTributaria();
 	    infoTributaria.setSecuencial(documento.getNumeroFc());
@@ -128,10 +130,11 @@ public class Util {
 		//Datos info factura
 		
 	    InfoFactura infoFactura = new InfoFactura();
-	    infoFactura.setFechaEmision(fecha);
+	    infoFactura.setFechaEmision(fechaActual);
 	    infoFactura.setDirEstablecimiento(documento.getCodigoEm().getDireccion());
 	    
 	    infoFactura.setIdentificacionComprador(documento.getCodigoCliente().getIdentificacionCl());
+	    infoFactura.setTipoIdentificacionComprador(documento.getCodigoCliente().getCodigoTi().getNombreTi().toUpperCase().equals("RUC") ? "04" : "05");
 	    infoFactura.setRazonSocialComprador(documento.getCodigoCliente().getNombreCl() + " " + documento.getCodigoCliente().getNombreCl());
 	    infoFactura.setTotalSinImpuestos(new BigDecimal(documento.getSubtotalFc()));
 	    infoFactura.setTotalDescuento(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP));
