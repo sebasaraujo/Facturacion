@@ -227,7 +227,7 @@ public class Util {
 	      Factura.InfoAdicional.CampoAdicional detalle = new Factura.InfoAdicional.CampoAdicional();
 	      if(i==0)
 	      {
-	    	  detalle.setNombre("Teléfono");
+	    	  detalle.setNombre("Telefono");
 		      detalle.setValue(cliente.getTelefonoCl());
 	      }
 	      else
